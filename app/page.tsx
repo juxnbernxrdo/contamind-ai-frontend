@@ -128,19 +128,28 @@ function AppMockupSection() {
               Desde el flujo de caja hasta la emisión de facturas electrónicas. ContaMind es el cerebro financiero que tu PyME necesita.
             </p>
             
-            <div className="flex flex-col gap-2 p-1 bg-[var(--off-white)] rounded-[14px] border border-[var(--border-light)] mb-8">
+            <div className="flex flex-col gap-2 p-1 bg-[var(--off-white)] rounded-[14px] border border-[var(--border-light)] mb-8 relative">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-[10px] text-[0.9rem] font-medium transition-all ${
+                  className={`relative flex items-center gap-3 px-4 py-3 rounded-[10px] text-[0.9rem] font-medium transition-colors duration-200 ${
                     activeTab === tab.id 
-                    ? 'bg-[var(--white)] text-[var(--accent)] shadow-sm border border-[var(--border-light)]' 
+                    ? 'text-[var(--accent)]' 
                     : 'text-[var(--text-3)] hover:text-[var(--text-1)]'
                   }`}
                 >
-                  {tab.icon}
-                  {tab.label}
+                  {activeTab === tab.id && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute inset-0 bg-[var(--white)] rounded-[10px] border border-[var(--border-light)] shadow-sm"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  <span className="relative z-10 flex items-center gap-3">
+                    {tab.icon}
+                    {tab.label}
+                  </span>
                 </button>
               ))}
             </div>
