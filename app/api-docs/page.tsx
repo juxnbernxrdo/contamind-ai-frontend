@@ -28,7 +28,7 @@ export default function ApiDocsPage() {
           <div id="auth" className="mb-16">
             <h2 className="text-2xl font-bold text-[var(--text-1)] mb-4">Autenticación</h2>
             <p className="text-[0.95rem] text-[var(--text-3)] mb-4">
-              Cada solicitud a la API debe incluir la cabecera <code className="bg-[var(--off-white)] p-1 rounded">Authorization</code> con el esquema Bearer y tu API Key generada desde el dashboard.
+              Cada solicitud a la API debe incluir la cabecera <code className="bg-[var(--off-white)] p-1 rounded">Authorization</code> con el esquema Bearer y tu API Key generada desde tu cuenta.
             </p>
             <div className="bg-[#1d1d1f] rounded-[12px] p-4 text-[0.85rem] text-[var(--white)] font-mono overflow-x-auto">
               <span className="text-[#ff9f0a]">curl</span> https://api.contamind.ai/v1/invoices \<br/>

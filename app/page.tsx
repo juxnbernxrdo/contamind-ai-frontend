@@ -108,10 +108,9 @@ function FeaturesSection() {
 }
 
 function AppMockupSection() {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('invoicing');
 
   const tabs = [
-    { id: 'dashboard', label: 'Dashboard', icon: <BarChart3 size={14} /> },
     { id: 'invoicing', label: 'Facturación', icon: <Plus size={14} /> },
     { id: 'reports', label: 'Reportes', icon: <Blocks size={14} /> }
   ];
@@ -166,7 +165,6 @@ function AppMockupSection() {
           
           <div className="lg:w-2/3 w-full">
             <MockupWindow title={`app.contamind.ai/${activeTab}`} delay={0.1}>
-              {activeTab === 'dashboard' && <DashboardMockup />}
               {activeTab === 'invoicing' && <InvoicingMockup />}
               {activeTab === 'reports' && <ReportsMockup />}
             </MockupWindow>
@@ -176,61 +174,6 @@ function AppMockupSection() {
     </section>
   );
 }
-
-function DashboardMockup() {
-  return (
-    <div className="p-3 sm:p-6 bg-[var(--off-white)] h-full flex flex-col gap-3 sm:gap-6">
-      {/* Header Cards - Adapt columns based on mockup width */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 shrink-0">
-        {[
-          { label: 'Ingresos', val: '$45k', delta: '+12%', color: 'text-[var(--green)]', bg: 'bg-[var(--green-soft)]' },
-          { label: 'Egresos', val: '$12k', delta: '-4%', color: 'text-[var(--text-3)]', bg: 'bg-[var(--border-light)]' },
-          { label: 'Cobrar', val: '$8k', delta: '5', color: 'text-[var(--accent)]', bg: 'bg-[var(--accent-soft)]', hideOnMobile: true }
-        ].map((kpi, i) => (
-          <div key={i} className={`bg-[var(--white)] p-2.5 sm:p-4 rounded-[12px] border border-[var(--border-light)] shadow-sm ${kpi.hideOnMobile ? 'hidden lg:block' : ''}`}>
-            <h4 className="text-[0.55rem] sm:text-[0.65rem] text-[var(--text-3)] font-bold uppercase tracking-widest mb-1 truncate">{kpi.label}</h4>
-            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-              <span className="text-[1rem] sm:text-[1.4rem] font-bold text-[var(--text-1)]">{kpi.val}</span>
-              <span className={`${kpi.bg} ${kpi.color} text-[0.6rem] sm:text-[0.68rem] font-bold px-1.5 py-0.5 rounded-[4px] w-fit`}>{kpi.delta}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-      
-      {/* Chart Section */}
-      <div className="bg-[var(--white)] rounded-[12px] border border-[var(--border-light)] shadow-sm p-3 sm:p-5 flex-1 min-h-[140px] flex flex-col overflow-hidden">
-        <div className="flex justify-between items-center mb-4 sm:mb-6 shrink-0">
-          <h4 className="text-[0.75rem] sm:text-[0.85rem] text-[var(--text-1)] font-bold">Flujo Proyectado</h4>
-          <div className="hidden xs:flex gap-2">
-            <div className="flex items-center gap-1.5 text-[0.6rem] sm:text-[0.7rem] text-[var(--text-3)]">
-              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[var(--accent)]"></span> <span className="hidden sm:inline">Real</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-[0.6rem] sm:text-[0.7rem] text-[var(--text-3)]">
-              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[var(--accent)] opacity-30"></span> <span className="hidden sm:inline">Proyectado</span>
-            </div>
-          </div>
-        </div>
-        
-        <div className="flex-1 flex items-end gap-1 sm:gap-2.5 pb-2 overflow-x-auto no-scrollbar">
-          {[40, 65, 45, 80, 50, 95, 70, 100, 85, 60, 45, 30, 55, 75].map((h, i) => (
-            <div key={i} className="flex-1 flex flex-col justify-end gap-1 h-full min-w-[10px] sm:min-w-[14px]">
-              <motion.div 
-                initial={{ height: 0 }}
-                animate={{ height: `${h}%` }}
-                transition={{ duration: 0.8, delay: i * 0.03 }}
-                className={`w-full rounded-t-[2px] sm:rounded-t-[4px] transition-colors ${i > 10 ? 'bg-[var(--accent)] opacity-20' : 'bg-[var(--accent)] opacity-90'}`}
-              ></motion.div>
-              <div className="h-3 flex items-center justify-center">
-                <span className="text-[0.5rem] sm:text-[0.6rem] text-[var(--text-4)] font-medium uppercase font-mono">w{i+1}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 
 function InvoicingMockup() {
   return (

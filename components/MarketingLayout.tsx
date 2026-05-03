@@ -51,9 +51,10 @@ export function Navbar({ isDark, toggleTheme }: { isDark: boolean; toggleTheme: 
           >
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
-          <Link href="/dashboard" className="bg-[var(--accent)] text-white px-[20px] lg:px-[28px] py-[10px] lg:py-[12px] rounded-[24px] text-[0.9rem] font-medium hover:bg-[var(--accent-hover)] transition-all">
+
+          <button className="bg-[var(--accent)] text-white px-[20px] lg:px-[28px] py-[10px] lg:py-[12px] rounded-[24px] text-[0.9rem] font-medium hover:bg-[var(--accent-hover)] transition-all">
             Ingresar
-          </Link>
+          </button>
         </div>
       </div>
     </header>
