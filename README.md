@@ -1,20 +1,75 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+<img width="1200" height="475" alt="ContaMind Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Run and deploy your AI Studio app
+# ContaMind AI Frontend
 
-This contains everything you need to run your app locally.
+**ContaMind** es una plataforma de contabilidad e inteligencia artificial diseñada para automatizar la gestión financiera de PyMEs. Este repositorio contiene el frontend construido con **Next.js 15**, enfocado en proporcionar una experiencia de usuario moderna, rápida y fluida.
 
-View your app in AI Studio: https://ai.studio/apps/bcb02708-5548-4342-90a5-04bda15a024d
+## 🚀 Características Principales
 
-## Run Locally
+- **Módulo Financiero NIIF:** Plan de cuentas, cierres, asientos automáticos y estados financieros integrados.
+- **Facturación Electrónica (SRI):** Autorización instantánea y gestión de comprobantes recibidos.
+- **IA Financiera:** Procesamiento de lenguaje natural para asientos contables y análisis predictivo de solvencia.
+- **Gestión de Cartera:** Control exhaustivo de cuentas por cobrar y pagar.
+- **Nómina Automatizada:** Cálculos de ley, descuentos IESS y roles de pago.
+- **Cumplimiento Tributario:** Generación automática de formularios 104, 103 y anexos transaccionales (ATS).
 
-**Prerequisites:**  Node.js
+## 🛠️ Tecnologías
 
+- **Framework:** [Next.js 15](https://nextjs.org/) (App Router)
+- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
+- **Estilos:** [Tailwind CSS 4](https://tailwindcss.com/) & [Vanilla CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
+- **Animaciones:** [Motion](https://motion.dev/) (Framer Motion)
+- **Iconos:** [Lucide React](https://lucide.dev/)
+- **IA:** Integración con Google Gemini via `@google/genai`
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 📁 Estructura del Proyecto
+
+```text
+├── app/              # Rutas y páginas (App Router)
+│   ├── api-docs/     # Documentación técnica
+│   ├── blog/         # Artículos y novedades
+│   ├── nosotros/     # Información de la empresa
+│   └── ...           # Módulos de marketing y producto
+├── components/       # Componentes de UI reutilizables
+├── hooks/            # Hooks personalizados (p.ej. use-mobile)
+├── lib/              # Utilidades y configuraciones
+└── public/           # Activos estáticos
+```
+
+## 💻 Configuración Local
+
+### Prerrequisitos
+
+- Node.js 20+
+- NPM o PNPM
+
+### Pasos para ejecutar
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/tu-usuario/contamind-ai-frontend.git
+   cd contamind-ai-frontend
+   ```
+
+2. **Instalar dependencias:**
+   ```bash
+   npm install
+   ```
+
+3. **Configurar variables de entorno:**
+   Crea un archivo `.env.local` basado en `.env.example` y añade tu `GEMINI_API_KEY`.
+   ```bash
+   cp .env.example .env.local
+   ```
+
+4. **Iniciar servidor de desarrollo:**
+   ```bash
+   npm run dev
+   ```
+   Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+
+## 📄 Licencia
+
+Este proyecto es privado. Para más información, contactar con el equipo de [ContaMind](https://contamind.ai).
