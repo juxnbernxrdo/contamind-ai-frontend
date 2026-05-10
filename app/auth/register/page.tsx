@@ -52,7 +52,7 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true)
     try {
-      const { error } = await supabase.auth.signUp({
+      const { error, data: signUpData } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: {
@@ -67,10 +67,33 @@ export default function RegisterPage() {
 
       if (error) throw error
 
+      // Sincronizar perfil y empresa inicial con el backend
+      const token = signUpData.session?.access_token
+      if (token) {
+        try {
+          await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/register`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              full_name: data.fullName,
+              company_name: data.companyName,
+              ruc: data.ruc,
+              industry: data.industry,
+            }),
+          })
+        } catch {
+          // Backend no disponible — el perfil se sincronizará en el próximo login
+        }
+      }
+
       toast.success("¡Registro exitoso! Por favor verifica tu correo.")
       setStep(4) // Success state
-    } catch (err: any) {
-      toast.error(err.message || "Error al registrarse")
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Error al registrarse"
+      toast.error(message)
     } finally {
       setIsLoading(false)
     }
