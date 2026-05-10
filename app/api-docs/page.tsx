@@ -30,7 +30,7 @@ export default function ApiDocsPage() {
             <p className="text-[0.95rem] text-[var(--text-3)] mb-4">
               Cada solicitud a la API debe incluir la cabecera <code className="bg-[var(--off-white)] p-1 rounded">Authorization</code> con el esquema Bearer y tu API Key generada desde tu cuenta.
             </p>
-            <div className="bg-[#1d1d1f] rounded-[12px] p-4 text-[0.85rem] text-[var(--white)] font-mono overflow-x-auto">
+            <div className="bg-[#1d1d1f] dark:bg-[#0a0a0a] border border-[#2c2c2e] rounded-[12px] p-4 text-[0.85rem] text-white font-mono overflow-x-auto shadow-xl">
               <span className="text-[#ff9f0a]">curl</span> https://api.contamind.ai/v1/invoices \<br/>
               &nbsp;&nbsp;-H <span className="text-[#30d158]">&quot;Authorization: Bearer sk_live_xxxxxxxxxx&quot;</span>
             </div>
@@ -41,7 +41,7 @@ export default function ApiDocsPage() {
             <p className="text-[0.95rem] text-[var(--text-3)] mb-4">
               Este endpoint generará una factura en el sistema y, si estás en producción, solicitará la autorización automática en el ente tributario seleccionado en tu cuenta (ej. SRI).
             </p>
-            <div className="bg-[#1d1d1f] rounded-[12px] p-4 text-[0.85rem] text-[var(--white)] font-mono overflow-x-auto">
+            <div className="bg-[#1d1d1f] dark:bg-[#0a0a0a] border border-[#2c2c2e] rounded-[12px] p-4 text-[0.85rem] text-white font-mono overflow-x-auto shadow-xl">
               <span className="text-[#ff9f0a]">POST</span> /v1/invoices<br/><br/>
               {`{`} <br/>
               &nbsp;&nbsp;<span className="text-[#aeaeb2]">&quot;customerId&quot;</span>: <span className="text-[#30d158]">&quot;cus_kj823&quot;</span>, <br/>

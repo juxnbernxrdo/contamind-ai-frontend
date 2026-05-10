@@ -22,7 +22,7 @@ export default function DocumentacionPage() {
             <input 
               type="text" 
               placeholder="Buscar guías, tutoriales, errores..." 
-              className="w-full pl-6 pr-12 py-4 rounded-[12px] bg-[var(--white)] border border-[var(--border-light)] text-[var(--text-1)] shadow-sm focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all"
+              className="w-full pl-6 pr-12 py-4 rounded-[14px] bg-[var(--off-white)] focus:bg-[var(--white)] border border-[var(--border-light)] hover:border-[var(--border)] text-[var(--text-1)] shadow-sm focus:outline-none focus:ring-[3px] focus:ring-[var(--accent-soft)] focus:border-[var(--accent)] transition-all dark:bg-[#1a1a1a] dark:focus:bg-[#222222]"
             />
             <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-3)]">
               🔍

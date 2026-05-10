@@ -57,12 +57,18 @@ function HeroSection() {
         </motion.p>
         
         <motion.div variants={fadeIn} className="flex flex-col sm:flex-row items-center gap-4">
-          <button className="bg-[var(--accent)] text-white px-[28px] py-[12px] rounded-[24px] text-[0.9rem] font-medium hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_4px_20px_rgba(0,113,227,0.2)] hover:shadow-[0_8px_25px_rgba(0,113,227,0.3)] hover:-translate-y-[1px] whitespace-nowrap">
+          <Link 
+            href="/auth/register"
+            className="bg-[var(--accent)] text-white px-[28px] py-[12px] rounded-[24px] text-[0.9rem] font-medium hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_4px_20px_rgba(0,113,227,0.2)] hover:shadow-[0_8px_25px_rgba(0,113,227,0.3)] hover:-translate-y-[1px] whitespace-nowrap"
+          >
             Empieza gratis
-          </button>
-          <button className="px-[28px] py-[12px] rounded-[24px] text-[0.9rem] font-medium text-[var(--text-2)] border border-[var(--border-light)] hover:bg-[var(--off-white)] transition-colors duration-200 whitespace-nowrap">
+          </Link>
+          <Link 
+            href="/contacto"
+            className="px-[28px] py-[12px] rounded-[24px] text-[0.9rem] font-medium text-[var(--text-2)] border border-[var(--border-light)] hover:bg-[var(--off-white)] transition-colors duration-200 whitespace-nowrap"
+          >
             Ver demo
-          </button>
+          </Link>
         </motion.div>
       </motion.div>
     </section>
@@ -93,7 +99,7 @@ function FeaturesSection() {
         
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((f, i) => (
-            <motion.div key={i} variants={fadeIn} className="bg-[var(--white)] p-[28px] rounded-[18px] border border-[var(--border-light)] shadow-[0_1px_4px_rgba(0,0,0,0.03)] hover:-translate-y-[2px] transition-transform duration-300">
+            <motion.div key={i} variants={fadeIn} className="bg-[var(--white)] p-[28px] rounded-[18px] border border-[var(--border-light)] shadow-subtle hover:-translate-y-[2px] transition-transform duration-300">
               <div className="h-12 w-12 flex items-center justify-center rounded-[12px] bg-[var(--off-white)] mb-6">
                 {f.icon}
               </div>
@@ -292,14 +298,14 @@ function MockupWindow({ children, title, delay = 0 }: { children: React.ReactNod
       whileInView={{ opacity: 1, y: 0 }} 
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] }}
-      className="w-full rounded-t-[10px] rounded-b-none overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.08)] p-[1px] bg-linear-to-b from-[var(--border-light)] to-transparent aspect-[16/11] sm:aspect-[16/9] min-h-[320px] xs:min-h-[380px]"
+      className="w-full rounded-t-[10px] rounded-b-none overflow-hidden shadow-prominent p-[1px] bg-linear-to-b from-[var(--border-light)] to-transparent aspect-[16/11] sm:aspect-[16/9] min-h-[320px] xs:min-h-[380px]"
     >
       <div className="w-full h-full bg-[var(--white)] rounded-t-[7px] flex flex-col overflow-hidden">
-        <div className="h-[44px] flex items-center px-4 bg-gradient-to-b from-[var(--off-white)] to-[var(--border-light)] border-b border-black/5 relative shrink-0">
+        <div className="h-[44px] flex items-center px-4 bg-gradient-to-b from-[var(--off-white)] to-[var(--border-light)] border-b border-[var(--border-light)] relative shrink-0">
           <div className="flex gap-2 items-center absolute left-4">
-            <div className="w-3 h-3 rounded-full bg-[#ED6158] border border-black/5" />
-            <div className="w-3 h-3 rounded-full bg-[#FCC02E] border border-black/5" />
-            <div className="w-3 h-3 rounded-full bg-[#5FC038] border border-black/5" />
+            <div className="w-3 h-3 rounded-full bg-[#ED6158] opacity-80" />
+            <div className="w-3 h-3 rounded-full bg-[#FCC02E] opacity-80" />
+            <div className="w-3 h-3 rounded-full bg-[#5FC038] opacity-80" />
           </div>
           <div className="mx-auto flex w-[60%] sm:w-[40%] items-center justify-center bg-[var(--white)]/60 border border-black/5 rounded-md px-3 py-1 text-[0.7rem] text-[var(--text-3)] font-medium shadow-sm">
             <Lock size={10} className="mr-1.5 opacity-70" />
@@ -340,7 +346,7 @@ function PricingSection() {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {plans.map((p, i) => (
-            <div key={i} className={`bg-[var(--white)] rounded-[18px] p-8 flex flex-col border ${p.popular ? 'border-[var(--accent)] shadow-[0_8px_30px_rgba(0,113,227,0.12)] -translate-y-2' : 'border-[var(--border-light)] shadow-[0_1px_4px_rgba(0,0,0,0.03)]'}`}>
+            <div key={i} className={`bg-[var(--white)] rounded-[18px] p-8 flex flex-col border ${p.popular ? 'border-[var(--accent)] shadow-default -translate-y-2' : 'border-[var(--border-light)] shadow-subtle'}`}>
               {p.popular && <div className="bg-[var(--accent-soft)] text-[var(--accent)] text-[0.72rem] font-semibold px-3 py-1 rounded-[20px] self-start mb-4">Recomendado</div>}
               <h3 className="font-sans font-semibold text-[1.2rem] text-[var(--text-1)] mb-2">{p.name}</h3>
               <div className="mb-4">
@@ -358,9 +364,16 @@ function PricingSection() {
                 ))}
               </ul>
               
-              <button className={`w-full py-3 rounded-[24px] text-[0.9rem] font-medium transition-all ${p.popular ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]' : 'bg-[var(--off-white)] text-[var(--text-1)] hover:bg-[var(--border-light)]'}`}>
+              <Link 
+                href="/auth/register"
+                className={`w-full block text-center py-3 rounded-[24px] text-[0.9rem] font-medium transition-all ${
+                  p.popular 
+                  ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] shadow-[0_4px_20px_rgba(0,113,227,0.2)]' 
+                  : 'bg-[var(--off-white)] text-[var(--text-1)] hover:bg-[var(--border-light)]'
+                }`}
+              >
                 Empieza gratis
-              </button>
+              </Link>
             </div>
           ))}
         </div>

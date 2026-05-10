@@ -1,7 +1,3 @@
-<div align="center">
-<img width="1200" height="475" alt="ContaMind Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
 # ContaMind AI Frontend
 
 **ContaMind** es una plataforma de contabilidad e inteligencia artificial diseñada para automatizar la gestión financiera de PyMEs. Este repositorio contiene el frontend construido con **Next.js 15**, enfocado en proporcionar una experiencia de usuario moderna, rápida y fluida.

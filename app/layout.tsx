@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import { Instrument_Serif, Inter } from 'next/font/google';
 import './globals.css'; // Global styles
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 const instrumentSerif = Instrument_Serif({
   weight: '400',
@@ -21,7 +22,11 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="es" className={`${instrumentSerif.variable} ${geist.variable}`}>
-      <body className="antialiased" suppressHydrationWarning>{children}</body>
+      <body className="antialiased" suppressHydrationWarning>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
