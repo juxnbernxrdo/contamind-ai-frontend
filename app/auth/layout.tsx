@@ -128,39 +128,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           </AnimatePresence>
         </div>
 
-        {/* Footer Badge — fully isolated */}
-        <div className="relative z-10">
-          <motion.div
-            initial={{ y: 10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full backdrop-blur-md"
-            style={{
-              backgroundColor: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
-            }}
-          >
-            <div
-              className="flex items-center justify-center w-5 h-5 rounded-full"
-              style={{ backgroundColor: 'rgba(48,209,88,0.2)' }}
-            >
-              <CheckCircle2
-                className="w-3.5 h-3.5"
-                style={{ color: '#30d158' }}
-              />
-            </div>
-            <span
-              className="font-bold uppercase"
-              style={{
-                fontSize: '0.75rem',
-                letterSpacing: '0.15em',
-                color: 'rgba(255,255,255,0.7)',
-              }}
-            >
-              Cumple SRI Ecuador
-            </span>
-          </motion.div>
-        </div>
 
         {/* Decorative glows — fixed RGBA, no theme tokens */}
         <div
