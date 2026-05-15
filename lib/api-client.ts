@@ -46,9 +46,10 @@ apiClient.interceptors.response.use(
 
       try {
         // Intentamos refrescar el token
+        const refreshToken = Cookies.get('contamind-refresh');
         const { data } = await axios.post(
           `${API_URL}/auth/refresh`,
-          {},
+          { refreshToken },
           { withCredentials: true }
         );
 

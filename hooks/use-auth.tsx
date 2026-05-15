@@ -32,7 +32,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refresh = useCallback(async () => {
     try {
-      const { data } = await apiClient.post('/auth/refresh');
+      const refreshToken = Cookies.get('contamind-refresh');
+      if (!refreshToken) return false;
+      const { data } = await apiClient.post('/auth/refresh', { refreshToken });
       if (data.accessToken) {
         setAccessToken(data.accessToken);
         setUser(data.user);
@@ -90,7 +92,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await apiClient.post('/auth/logout');
+      const refreshToken = Cookies.get('contamind-refresh');
+      await apiClient.post('/auth/logout', { refreshToken });
     } finally {
       setUser(null);
       setAccessToken(null);

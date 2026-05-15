@@ -19,7 +19,8 @@ export function middleware(request: NextRequest) {
   // Rutas que solo se pueden ver si NO estás logueado (login/register)
   const isAuthRoute = 
     pathname.startsWith('/auth/login') || 
-    pathname.startsWith('/auth/register');
+    pathname.startsWith('/auth/register') ||
+    pathname.startsWith('/auth/2fa');
 
   if (isProtectedRoute && !sessionCookie) {
     // Redirigir al login si intenta entrar a dashboard sin sesión
@@ -43,5 +44,6 @@ export const config = {
     '/profile/:path*',
     '/auth/login',
     '/auth/register',
+    '/auth/2fa',
   ],
 };
