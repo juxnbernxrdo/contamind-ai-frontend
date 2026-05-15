@@ -1,7 +1,9 @@
 import type {Metadata} from 'next';
 import { Instrument_Serif, Inter } from 'next/font/google';
-import './globals.css'; // Global styles
+import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { AuthProvider } from '@/hooks/use-auth';
+import { Toaster } from 'sonner';
 
 const instrumentSerif = Instrument_Serif({
   weight: '400',
@@ -24,7 +26,10 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     <html lang="es" className={`${instrumentSerif.variable} ${geist.variable}`}>
       <body className="antialiased" suppressHydrationWarning>
         <ThemeProvider>
-          {children}
+          <AuthProvider>
+            {children}
+            <Toaster position="top-right" richColors />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

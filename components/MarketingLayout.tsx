@@ -68,14 +68,6 @@ export function Navbar() {
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
-          <Link 
-            href="/auth/login"
-            className="hidden sm:inline-flex bg-[var(--accent)] text-white px-[20px] lg:px-[28px] py-[10px] lg:py-[12px] rounded-[24px] text-[0.9rem] font-medium hover:bg-[var(--accent-hover)] transition-all shadow-[0_4px_12px_rgba(0,113,227,0.2)]"
-          >
-            Ingresar
-          </Link>
-
-          {/* Mobile Menu Toggle */}
           <button 
             className="md:hidden p-2 text-[var(--text-1)]"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -116,23 +108,6 @@ export function Navbar() {
                   <Link href="/seguridad" onClick={() => setIsMenuOpen(false)} className={`text-[var(--text-2)] font-medium ${pathname === '/seguridad' ? 'text-[var(--accent)]' : ''}`}>Seguridad</Link>
                   <Link href="/roadmap" onClick={() => setIsMenuOpen(false)} className={`text-[var(--text-2)] font-medium ${pathname === '/roadmap' ? 'text-[var(--accent)]' : ''}`}>Roadmap</Link>
                 </div>
-              </div>
-
-              <div className="pt-8 flex flex-col gap-4">
-                <Link 
-                  href="/auth/register"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="w-full bg-[var(--accent)] text-white text-center py-4 rounded-[24px] font-bold shadow-lg"
-                >
-                  Empieza Gratis
-                </Link>
-                <Link 
-                  href="/auth/login"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="w-full bg-[var(--off-white)] text-[var(--text-1)] text-center py-4 rounded-[24px] font-bold border border-[var(--border-light)]"
-                >
-                  Ingresar
-                </Link>
               </div>
             </nav>
           </motion.div>
