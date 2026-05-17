@@ -4,7 +4,6 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { useRouter } from 'next/navigation';
 import { apiClient, setAccessToken } from '@/lib/api-client';
 import { toast } from 'sonner';
-import Cookies from 'js-cookie';
 
 interface User {
   id: string;
@@ -32,9 +31,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refresh = useCallback(async () => {
     try {
-      const refreshToken = Cookies.get('contamind-refresh');
-      if (!refreshToken) return false;
-      const { data } = await apiClient.post('/auth/refresh', { refreshToken });
+      // El cliente de API enviará automáticamente la cookie HttpOnly
+      const { data } = await apiClient.post('/auth/refresh');
       if (data.accessToken) {
         setAccessToken(data.accessToken);
         setUser(data.user);
@@ -50,30 +48,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Intento de refresco silencioso al cargar la app
+    let mounted = true;
     const initAuth = async () => {
       await refresh();
-      setLoading(false);
+      if (mounted) {
+        setLoading(false);
+      }
     };
     initAuth();
+    return () => {
+      mounted = false;
+    };
   }, [refresh]);
 
   const login = async (dto: any) => {
     try {
       const { data } = await apiClient.post('/auth/login', dto);
       
-      // Si el backend requiere 2FA (por anomalía o configuración)
+      // Fix: Rutas de 2FA sincronizadas correctamente
       if (data.requires2FA || data.twoFAEnabled) {
-        router.push(`/auth/mfa?userId=${data.userId || data.user?.id}`);
+        router.push(`/auth/2fa?userId=${data.userId || data.user?.id}`);
         return { requires2FA: true };
       }
 
       setAccessToken(data.accessToken);
       setUser(data.user);
-      
-      // Persistir refresh token en cookie (idealmente el backend debería hacerlo via HttpOnly)
-      if (data.refreshToken) {
-        Cookies.set('contamind-refresh', data.refreshToken, { expires: 30, sameSite: 'strict' });
-      }
       
       if (data.securityWarnings) {
         data.securityWarnings.forEach((warn: string) => {
@@ -92,12 +91,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      const refreshToken = Cookies.get('contamind-refresh');
-      await apiClient.post('/auth/logout', { refreshToken });
+      await apiClient.post('/auth/logout');
+    } catch (e) {
+      // Ignorar error en logout, limpiar cliente igual
     } finally {
       setUser(null);
       setAccessToken(null);
-      Cookies.remove('contamind-refresh');
       router.push('/auth/login');
     }
   };
@@ -123,7 +122,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

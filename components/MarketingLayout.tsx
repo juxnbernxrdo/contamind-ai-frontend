@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Sun, Moon, BrainCircuit, ChevronDown, Menu, X } from 'lucide-react';
 import { Logo } from './Logo';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from './ThemeProvider';
 
 export function Navbar() {

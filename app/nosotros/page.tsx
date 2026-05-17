@@ -56,8 +56,8 @@ export default function NosotrosPage() {
             </div>
             <div className="bg-[var(--off-white)] p-6 rounded-[16px] text-center border border-[var(--border-light)]">
               <Code2 className="mx-auto text-[var(--accent)] mb-3" size={24} />
-              <div className="font-bold text-[var(--text-1)] mb-1">FastAPI + Supabase</div>
-              <div className="text-[0.8rem] text-[var(--text-3)]">Arquitectura de microservicios rápida, escalable y en tiempo real.</div>
+              <div className="font-bold text-[var(--text-1)] mb-1">NestJS + Supabase</div>
+              <div className="text-[0.8rem] text-[var(--text-3)]">Arquitectura de microservicios robusta, escalable y en tiempo real.</div>
             </div>
             <div className="bg-[var(--off-white)] p-6 rounded-[16px] text-center border border-[var(--border-light)]">
               <Cpu className="mx-auto text-[var(--accent)] mb-3" size={24} />

@@ -6,7 +6,7 @@ import type { NextRequest } from 'next/server';
  * Verifica la existencia de la cookie de sesión antes de permitir el acceso
  * a rutas privadas como /dashboard o /profile.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const sessionCookie = request.cookies.get('contamind-refresh');
 

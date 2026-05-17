@@ -2,12 +2,42 @@
 
 import { useAuth } from '@/hooks/use-auth';
 import { motion } from 'motion/react';
-import { LogOut, User, Shield, Activity, Settings } from 'lucide-react';
+import { LogOut, User, Shield, Activity, Settings, BarChart } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { apiClient } from '@/lib/api-client';
+
+interface DashboardStats {
+  activeSessions: number;
+  devices: number;
+  revenue: number;
+  pendingInvoices: number;
+  systemStatus: string;
+}
 
 export default function DashboardPage() {
   const { user, logout, loading } = useAuth();
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [statsLoading, setStatsLoading] = useState(true);
 
-  if (loading) {
+  useEffect(() => {
+    let mounted = true;
+    if (user && !loading) {
+      apiClient.get('/dashboard/stats')
+        .then((res) => {
+          if (mounted) {
+            setStats(res.data);
+            setStatsLoading(false);
+          }
+        })
+        .catch((err) => {
+          console.error("Error cargando stats del dashboard", err);
+          if (mounted) setStatsLoading(false);
+        });
+    }
+    return () => { mounted = false; };
+  }, [user, loading]);
+
+  if (loading || statsLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <Activity className="w-10 h-10 text-blue-500 animate-pulse" />
@@ -81,10 +111,28 @@ export default function DashboardPage() {
           </div>
           <div className="relative z-10">
             <h2 className="text-4xl font-bold mb-2 font-instrument">¡Hola de nuevo!</h2>
-            <p className="text-blue-100/80 max-w-md">
-              Tu infraestructura de seguridad está operando con normalidad. 
-              Tienes 3 sesiones activas en 2 dispositivos.
-            </p>
+            {stats ? (
+              <div className="mt-4 space-y-4">
+                <p className="text-blue-100/80 max-w-md">
+                  Estado del sistema: <strong className="text-white">{stats.systemStatus}</strong>.
+                  Tienes {stats.activeSessions} sesiones activas en {stats.devices} dispositivos.
+                </p>
+                <div className="grid grid-cols-2 gap-4 mt-6">
+                  <div className="bg-black/20 p-4 rounded-xl backdrop-blur-md">
+                    <p className="text-sm text-blue-200">Ingresos Mensuales</p>
+                    <p className="text-2xl font-bold">${stats.revenue.toLocaleString()}</p>
+                  </div>
+                  <div className="bg-black/20 p-4 rounded-xl backdrop-blur-md">
+                    <p className="text-sm text-blue-200">Facturas Pendientes</p>
+                    <p className="text-2xl font-bold">{stats.pendingInvoices}</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="text-blue-100/80 max-w-md mt-4">
+                Tu infraestructura de seguridad está operando con normalidad.
+              </p>
+            )}
           </div>
         </motion.div>
       </main>
