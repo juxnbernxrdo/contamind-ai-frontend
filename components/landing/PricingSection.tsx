@@ -2,8 +2,13 @@
 
 import Link from 'next/link';
 import { Check } from 'lucide-react';
+import { useAuth } from '@/hooks/use-auth';
 
 export function PricingSection() {
+  const { user } = useAuth();
+  const ctaHref = user ? '/dashboard' : '/auth/register';
+  const ctaText = user ? 'Ir al Dashboard' : 'Comenzar gratis';
+
   const plans = [
     { name: "Starter", price: "29", desc: "Para emprendedores.", features: ["Facturación básica", "1 usuario", "Soporte email"] },
     { name: "Professional", price: "79", desc: "Para PyMEs en crecimiento.", features: ["Facturación ilimitada", "Conciliación IA", "5 usuarios", "Flujo predictivo", "Soporte 24/7"], popular: true },
@@ -43,14 +48,14 @@ export function PricingSection() {
               </ul>
               
               <Link 
-                href="/auth/register"
-                className={`w-full block text-center py-3 rounded-[24px] text-[0.9rem] font-medium transition-all ${
+                href={ctaHref}
+                className={`w-full block text-center py-3 rounded-[24px] text-[0.9rem] font-semibold transition-all ${
                   p.popular 
                   ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] shadow-[0_4px_20px_rgba(0,113,227,0.2)]' 
                   : 'bg-[var(--off-white)] text-[var(--text-1)] hover:bg-[var(--border-light)]'
                 }`}
               >
-                Empieza gratis
+                {ctaText}
               </Link>
             </div>
           ))}

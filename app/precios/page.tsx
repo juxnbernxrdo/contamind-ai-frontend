@@ -4,8 +4,14 @@ import React from 'react';
 import { MarketingLayout } from '@/components/MarketingLayout';
 import { Check, Info, Bot } from 'lucide-react';
 import { motion } from 'motion/react';
+import Link from 'next/link';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function PreciosPage() {
+  const { user } = useAuth();
+  const ctaHref = user ? '/dashboard' : '/auth/register';
+  const ctaText = user ? 'Ir al Dashboard' : 'Comenzar gratis';
+
   const plans = [
     { name: "Starter", price: "29", desc: "Para emprendedores con cuentas base.", features: ["Facturas SRI ilimitadas", "Plan de cuentas estándar", "1 Usuario / 1 Empresa", "Descarga de doc. recibidos"] },
     { name: "Professional", price: "79", desc: "La suite ERP completa para PyMEs.", features: ["Agente IA NIIF ilimitado", "Nómina, Roles e IESS", "Gestión de Inventario", "Anexos Transaccionales (ATS)", "5 Usuarios"], popular: true },
@@ -19,7 +25,7 @@ export default function PreciosPage() {
         <p className="text-[1.1rem] text-[var(--text-2)] max-w-2xl mx-auto mb-16">
           Comienza tus 14 días gratis hoy. Cero compromisos, cancela cuando quieras.
         </p>
-
+ 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto text-left mb-16">
           {plans.map((p, i) => (
             <motion.div 
@@ -46,9 +52,16 @@ export default function PreciosPage() {
                 ))}
               </ul>
               
-              <button className={`w-full py-3 rounded-[24px] text-[0.9rem] font-medium transition-all ${p.popular ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]' : 'bg-[var(--off-white)] text-[var(--text-1)] hover:bg-[var(--border-light)]'}`}>
-                Empieza tu prueba gratis
-              </button>
+              <Link 
+                href={ctaHref}
+                className={`w-full block text-center py-3 rounded-[24px] text-[0.9rem] font-semibold transition-all ${
+                  p.popular 
+                  ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]' 
+                  : 'bg-[var(--off-white)] text-[var(--text-1)] hover:bg-[var(--border-light)]'
+                }`}
+              >
+                {ctaText}
+              </Link>
             </motion.div>
           ))}
         </div>

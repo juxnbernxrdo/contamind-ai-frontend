@@ -4,7 +4,13 @@ import { motion } from 'motion/react';
 import Link from 'next/link';
 import { staggerContainer, fadeIn } from './animations';
 
+import { useAuth } from '@/hooks/use-auth';
+
 export function HeroSection() {
+  const { user } = useAuth();
+  const ctaHref = user ? '/dashboard' : '/auth/register';
+  const ctaText = user ? 'Ir al Dashboard' : 'Comenzar gratis';
+
   return (
     <section className="px-6 py-[80px] md:py-[120px] max-w-7xl mx-auto flex flex-col items-center text-center">
       <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="flex flex-col items-center max-w-3xl">
@@ -23,10 +29,10 @@ export function HeroSection() {
         
         <motion.div variants={fadeIn} className="flex flex-col sm:flex-row items-center gap-4">
           <Link 
-            href="/auth/register"
-            className="bg-[var(--accent)] text-white px-[28px] py-[12px] rounded-[24px] text-[0.9rem] font-medium hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_4px_20px_rgba(0,113,227,0.2)] hover:shadow-[0_8px_25px_rgba(0,113,227,0.3)] hover:-translate-y-[1px] whitespace-nowrap"
+            href={ctaHref}
+            className="bg-[var(--accent)] text-white px-[28px] py-[12px] rounded-[24px] text-[0.9rem] font-semibold hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-[0_4px_20px_rgba(0,113,227,0.2)] hover:shadow-[0_8px_25px_rgba(0,113,227,0.3)] hover:-translate-y-[1px] whitespace-nowrap"
           >
-            Empieza gratis
+            {ctaText}
           </Link>
           <Link 
             href="/contacto"

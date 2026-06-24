@@ -8,9 +8,13 @@ import { Logo } from './Logo';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from './ThemeProvider';
 
+import { useAuth } from '@/hooks/use-auth';
+import { UserMenu } from './dashboard/UserMenu';
+
 export function Navbar() {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isDark = theme === 'dark';
 
@@ -21,6 +25,8 @@ export function Navbar() {
       document.body.style.overflow = 'unset';
     }
   }, [isMenuOpen]);
+
+  const initials = user?.firstName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U';
 
   return (
     <header className="sticky top-0 z-50 w-full backdrop-blur-[20px] backdrop-saturate-[180%] bg-[var(--nav-bg)] border-b border-[var(--border-light)] transition-colors duration-300">
@@ -68,6 +74,28 @@ export function Navbar() {
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
+          {/* Guest CTA Buttons or Logged User Profile Dropdown */}
+          {user ? (
+            <div className="hidden md:block">
+              <UserMenu align="right" />
+            </div>
+          ) : (
+            <div className="hidden md:flex items-center gap-3.5">
+              <Link 
+                href="/auth/login" 
+                className="text-[0.93rem] font-semibold text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors py-2 px-3"
+              >
+                Iniciar sesión
+              </Link>
+              <Link 
+                href="/auth/register" 
+                className="bg-[var(--accent)] text-white text-[0.88rem] font-semibold px-4 py-2.5 rounded-[24px] hover:bg-[var(--accent-hover)] transition-all duration-200 shadow-sm hover:shadow-[0_2px_12px_rgba(0,113,227,0.15)]"
+              >
+                Comenzar gratis
+              </Link>
+            </div>
+          )}
+
           <button 
             className="md:hidden p-2 text-[var(--text-1)]"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -109,6 +137,55 @@ export function Navbar() {
                   <Link href="/roadmap" onClick={() => setIsMenuOpen(false)} className={`text-[var(--text-2)] font-medium ${pathname === '/roadmap' ? 'text-[var(--accent)]' : ''}`}>Roadmap</Link>
                 </div>
               </div>
+
+              {/* Dynamic user menu / guest buttons in Mobile */}
+              {user ? (
+                <div className="pt-6 border-t border-[var(--border-light)] flex flex-col gap-4">
+                  <div className="flex items-center gap-3 px-2 py-1">
+                    {user.avatarUrl ? (
+                      <img src={user.avatarUrl} alt="Avatar" className="h-9 w-9 rounded-full object-cover ring-2 ring-[var(--border-light)]" />
+                    ) : (
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[#5e5ce6] text-sm font-bold text-white shadow-sm">
+                        {initials}
+                      </div>
+                    )}
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold text-[var(--text-1)]">
+                        {user.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : user.email.split('@')[0]}
+                      </span>
+                      <span className="text-xs text-[var(--text-4)] truncate max-w-[200px]">{user.email}</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2.5 pl-2 text-[0.95rem]">
+                    <Link href="/dashboard" onClick={() => setIsMenuOpen(false)} className="text-[var(--text-2)] font-medium py-1">Dashboard</Link>
+                    <Link href="/dashboard/profile" onClick={() => setIsMenuOpen(false)} className="text-[var(--text-2)] font-medium py-1">Mi perfil</Link>
+                    <Link href="/dashboard/settings" onClick={() => setIsMenuOpen(false)} className="text-[var(--text-2)] font-medium py-1">Ajustes</Link>
+                    <button 
+                      onClick={() => { setIsMenuOpen(false); logout(); }} 
+                      className="text-[var(--red)] font-semibold py-1 text-left flex items-center gap-1.5"
+                    >
+                      Cerrar sesión
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="pt-6 border-t border-[var(--border-light)] flex flex-col gap-3">
+                  <Link 
+                    href="/auth/login" 
+                    onClick={() => setIsMenuOpen(false)} 
+                    className="text-center font-semibold text-[var(--text-2)] hover:text-[var(--text-1)] py-2 border border-[var(--border-light)] rounded-[20px] transition-colors"
+                  >
+                    Iniciar sesión
+                  </Link>
+                  <Link 
+                    href="/auth/register" 
+                    onClick={() => setIsMenuOpen(false)} 
+                    className="text-center bg-[var(--accent)] text-white font-semibold py-2.5 rounded-[20px] transition-all hover:bg-[var(--accent-hover)]"
+                  >
+                    Comenzar gratis
+                  </Link>
+                </div>
+              )}
             </nav>
           </motion.div>
         )}
