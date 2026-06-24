@@ -8,13 +8,55 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined
  * El Access Token se maneja en memoria/headers.
  * El Refresh Token lo maneja el backend automáticamente vía cookies HttpOnly.
  */
+import { handleMockRequest } from './mock-auth';
+
+// Set this to true to run in mock mode (UI/UX only)
+const USE_MOCK = false;
+
 export const apiClient = axios.create({
   baseURL: API_URL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
   },
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
 });
+
+if (USE_MOCK) {
+  apiClient.defaults.adapter = async (config) => {
+    try {
+      let parsedData = config.data;
+      if (typeof config.data === 'string') {
+        try {
+          parsedData = JSON.parse(config.data);
+        } catch (e) {
+          // ignore
+        }
+      }
+      
+      const responseData = await handleMockRequest(config.url || '', config.method || 'get', parsedData);
+      
+      return {
+        data: responseData.data,
+        status: responseData.status || 200,
+        statusText: 'OK',
+        headers: config.headers as any,
+        config,
+      };
+    } catch (error: any) {
+      if (error.response) {
+        return Promise.reject({
+          ...error,
+          config,
+          request: {},
+        });
+      }
+      return Promise.reject(error);
+    }
+  };
+}
 
 let accessToken: string | null = null;
 
@@ -47,8 +89,9 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const isRefreshRequest = originalRequest?.url?.endsWith('/auth/refresh');
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry && !isRefreshRequest) {
       if (isRefreshing) {
         return new Promise((resolve) => {
           refreshSubscribers.push((token) => {
@@ -81,8 +124,11 @@ apiClient.interceptors.response.use(
         isRefreshing = false;
         accessToken = null;
         if (typeof window !== 'undefined') {
-          // Fallback en caso de que todo falle
-          window.location.href = '/auth/login';
+          const path = window.location.pathname;
+          // Solo redirigir si se intenta acceder a una ruta protegida
+          if (path.startsWith('/dashboard') || path.startsWith('/profile') || path.startsWith('/app')) {
+            window.location.href = '/auth/login';
+          }
         }
       }
     }
