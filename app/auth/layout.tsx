@@ -86,7 +86,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                   color: '#ffffff',
                 }}
               >
-                "{testimonials[currentTestimonial].quote}"
+                &ldquo;{testimonials[currentTestimonial].quote}&rdquo;
               </h1>
 
               <div className="flex items-center gap-4">
