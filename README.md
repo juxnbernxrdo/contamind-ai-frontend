@@ -1,71 +1,162 @@
-# ContaMind AI Frontend
+# ContaMind AI — Frontend
 
-**ContaMind** es una plataforma de contabilidad e inteligencia artificial diseñada para automatizar la gestión financiera de PyMEs. Este repositorio contiene el frontend construido con **Next.js 15**, enfocado en proporcionar una experiencia de usuario moderna, rápida y fluida.
+AI-powered accounting platform for Ecuadorian SMEs. Built with Next.js 16, React 19, and Tailwind CSS 4.
 
-## 🚀 Características Principales
+---
 
-- **Módulo Financiero NIIF:** Plan de cuentas, cierres, asientos automáticos y estados financieros integrados.
-- **Facturación Electrónica (SRI):** Autorización instantánea y gestión de comprobantes recibidos.
-- **IA Financiera:** Procesamiento de lenguaje natural para asientos contables y análisis predictivo de solvencia.
-- **Gestión de Cartera:** Control exhaustivo de cuentas por cobrar y pagar.
-- **Nómina Automatizada:** Cálculos de ley, descuentos IESS y roles de pago.
-- **Cumplimiento Tributario:** Generación automática de formularios 104, 103 y anexos transaccionales (ATS).
+## Tech Stack
 
-## 🛠️ Tecnologías
+| Category | Technology | Version |
+|---|---|---|
+| Framework | Next.js | 16.2.6 |
+| UI Library | React | 19.2.6 |
+| Language | TypeScript | 6.0.3 |
+| CSS | Tailwind CSS | 4.2.4 |
+| Forms | React Hook Form | 7.75.0 |
+| Validation | Zod | 4.4.3 |
+| HTTP Client | Axios | 1.16.1 |
+| Icons | Lucide React | 1.16.0 |
+| Animations | Motion | 12.38.0 |
+| Toasts | Sonner | 2.0.7 |
+| AI SDK | Google GenAI | 2.0.0 |
+| WebAuthn | SimpleWebAuthn | 13.3.0 |
+| E2E Testing | Playwright | 1.60.0 |
+| Linting | ESLint (Next) | 9.39.4 |
 
-- **Framework:** [Next.js 15](https://nextjs.org/) (App Router)
-- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
-- **Estilos:** [Tailwind CSS 4](https://tailwindcss.com/) & [Vanilla CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
-- **Animaciones:** [Motion](https://motion.dev/) (Framer Motion)
-- **Iconos:** [Lucide React](https://lucide.dev/)
-- **IA:** Integración con Google Gemini via `@google/genai`
+---
 
-## 📁 Estructura del Proyecto
+## Getting Started
 
-```text
-├── app/              # Rutas y páginas (App Router)
-│   ├── api-docs/     # Documentación técnica
-│   ├── blog/         # Artículos y novedades
-│   ├── nosotros/     # Información de la empresa
-│   └── ...           # Módulos de marketing y producto
-├── components/       # Componentes de UI reutilizables
-├── hooks/            # Hooks personalizados (p.ej. use-mobile)
-├── lib/              # Utilidades y configuraciones
-└── public/           # Activos estáticos
-```
-
-## 💻 Configuración Local
-
-### Prerrequisitos
+### Prerequisites
 
 - Node.js 20+
-- NPM o PNPM
+- npm
+- NestJS backend running (default: `http://localhost:3001`)
 
-### Pasos para ejecutar
+### Installation
 
-1. **Clonar el repositorio:**
-   ```bash
-   git clone https://github.com/tu-usuario/contamind-ai-frontend.git
-   cd contamind-ai-frontend
-   ```
+```bash
+git clone <repository-url>
+cd contamind-ai-frontend
+npm install
+```
 
-2. **Instalar dependencias:**
-   ```bash
-   npm install
-   ```
+### Environment Variables
 
-3. **Configurar variables de entorno:**
-   Crea un archivo `.env.local` basado en `.env.example` y añade tu `GEMINI_API_KEY`.
-   ```bash
-   cp .env.example .env.local
-   ```
+Copy `.env.example` to `.env.local` and configure:
 
-4. **Iniciar servidor de desarrollo:**
-   ```bash
-   npm run dev
-   ```
-   Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+| Variable | Description | Default |
+|---|---|---|
+| `NEXT_PUBLIC_API_URL` | Backend API base URL (NestJS) | `http://localhost:3001` |
+| `GEMINI_API_KEY` | Google Gemini AI API key | — |
+| `APP_URL` | Application base URL | — |
 
-## 📄 Licencia
+### Development Server
 
-Este proyecto es privado. Para más información, contactar con el equipo de [ContaMind](https://contamind.ai).
+```bash
+npm run dev
+```
+
+The app runs at `http://localhost:3000` by default.
+
+---
+
+## Project Structure
+
+```
+contamind-ai-frontend/
+├── app/
+│   ├── auth/                  # Auth flows (login, register, 2FA, etc.)
+│   ├── dashboard/             # Dashboard shell (protected)
+│   │   ├── admin/users/       # Admin user management
+│   │   ├── audit/             # Audit logs
+│   │   ├── compliance/        # Compliance reports
+│   │   ├── profile/           # User profile
+│   │   ├── security/          # Security settings, sessions, devices
+│   │   ├── settings/          # App settings
+│   │   └── [...slug]/         # Catch-all for unbuilt modules
+│   ├── blog/                  # Blog section
+│   ├── caracteristicas/       # Features page
+│   ├── clientes/              # Clients page
+│   ├── contacto/              # Contact page
+│   ├── documentacion/         # Documentation page
+│   ├── legal/                 # Legal pages
+│   ├── nosotros/              # About page
+│   ├── precios/               # Pricing page
+│   ├── roadmap/               # Roadmap page
+│   ├── seguridad/             # Security page
+│   ├── globals.css            # Global styles and design tokens
+│   ├── layout.tsx             # Root layout (fonts, ThemeProvider, AuthProvider)
+│   └── page.tsx               # Landing page (homepage)
+├── components/
+│   ├── auth/                  # Auth form components
+│   ├── dashboard/             # Dashboard shell (Sidebar, Topbar, nav-config)
+│   ├── landing/               # Landing page sections (Hero, Features, Pricing)
+│   ├── ui/                    # Reusable UI primitives (Avatar, NavButton)
+│   ├── Logo.tsx               # Brand logo
+│   ├── MarketingLayout.tsx    # Marketing page layout wrapper
+│   └── ThemeProvider.tsx      # Dark/light theme provider
+├── hooks/                     # Custom React hooks (auth, data, UI)
+├── lib/                       # API client, mock auth, utilities
+├── tests/e2e/                 # Playwright end-to-end tests
+└── proxy.ts                   # Route protection middleware
+```
+
+---
+
+## Architecture Overview
+
+### App Router
+
+Next.js App Router with clear separation between public marketing pages and protected dashboard routes. Marketing pages use a `MarketingLayout` wrapper. Dashboard routes are nested under `/dashboard` with a sidebar-based shell layout.
+
+### Authentication
+
+JWT-based auth with refresh token rotation. Access tokens are held in memory and injected via Axios request interceptors. Refresh tokens are managed server-side via HttpOnly cookies. The API client (`lib/api-client.ts`) handles 401 responses with automatic token refresh and concurrent request queuing. WebAuthn passkey support is integrated via SimpleWebAuthn.
+
+### Design System
+
+A component-driven design system following Apple Human Interface Guidelines. Tokens, typography, colors, spacing, shadows, and component patterns are documented in `contamind-design-prd.md`. Key principles: flat color palette, generous whitespace, Instrument Serif for headlines, Geist Sans for UI, and minimal motion.
+
+### API Client
+
+Centralized Axios instance at `lib/api-client.ts` with automatic JWT injection, 401 response handling with token refresh, concurrent request queuing during refresh, XSRF cookie/header support, and configurable backend URL via `NEXT_PUBLIC_API_URL`.
+
+---
+
+## Scripts
+
+| Script | Command | Description |
+|---|---|---|
+| `dev` | `next dev` | Start development server |
+| `build` | `next build` | Production build |
+| `start` | `next start` | Start production server |
+| `lint` | `eslint .` | Run ESLint |
+| `clean` | `next clean` | Clean build artifacts |
+
+---
+
+## Testing
+
+End-to-end tests use Playwright. Tests are located in `tests/e2e/` and run against Chromium.
+
+```bash
+npx playwright install chromium
+npx playwright test
+```
+
+---
+
+## Deployment
+
+The application is configured for standalone output (`next.config.ts`), producing a self-contained build suitable for Docker containers.
+
+---
+
+## Documentation
+
+| File | Description |
+|---|---|
+| `contamind-design-prd.md` | Design system reference: colors, typography, spacing, components, motion |
+| `contamind-frontend-prd.md` | Frontend product specification: stack, architecture, modules |
+| `ContaMind_AI_PRD_v2.md` | Full product requirements document: vision, architecture, AI agents, ERP modules |
