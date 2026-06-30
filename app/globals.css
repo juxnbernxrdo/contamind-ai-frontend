@@ -25,6 +25,9 @@
   --color-red-soft: var(--red-soft);
   --color-amber: var(--amber);
   --color-amber-soft: var(--amber-soft);
+
+  --color-avatar-bg: var(--avatar-bg);
+  --color-avatar-text: var(--avatar-text);
   
   --font-serif: var(--font-instrument), Georgia, serif;
   --font-sans: var(--font-geist), -apple-system, sans-serif;
@@ -63,7 +66,10 @@
   --amber-soft: #fff8ec;
 
   --nav-bg: rgba(255, 255, 255, 0.75);
-  
+
+  --avatar-bg: #000000;
+  --avatar-text: #ffffff;
+
   background-color: var(--white);
   color: var(--text-1);
 }
@@ -88,7 +94,10 @@
   --amber-soft: rgba(255, 159, 10, 0.15);
 
   --nav-bg: rgba(0, 0, 0, 0.8);
-  
+
+  --avatar-bg: #ffffff;
+  --avatar-text: #000000;
+
   background-color: var(--white);
   color: var(--text-1);
 }
@@ -107,13 +116,20 @@
     --accent-hover: #409fff;
     --accent-soft: rgba(10, 132, 255, 0.15);
     --nav-bg: rgba(0, 0, 0, 0.8);
+    --avatar-bg: #ffffff;
+    --avatar-text: #000000;
   }
 }
 
-* {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
-  transition-duration: 200ms;
-  transition-timing-function: ease;
+body, header, aside, main, div, section, article, nav, p, span, h1, h2, h3, h4, h5, h6, a, button, input, select, textarea {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.no-transitions,
+.no-transitions * {
+  transition: none !important;
 }
 
 body {

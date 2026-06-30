@@ -1,14 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { Topbar } from '@/components/dashboard/Topbar';
-import { cn } from '@/lib/utils';
 import { BrainCircuit } from 'lucide-react';
+import { useSpring, motion, useMotionValue, useTransform } from 'motion/react';
 
 const SIDEBAR_KEY = 'contamind_sidebar_collapsed';
+const COLLAPSED_W = 64;
+const EXPANDED_W = 260;
+
+const sidebarSpring = {
+  stiffness: 350,
+  damping: 30,
+  mass: 0.8,
+};
 
 export default function DashboardLayout({
   children,
@@ -17,57 +25,71 @@ export default function DashboardLayout({
 }) {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    try {
+      return localStorage.getItem(SIDEBAR_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Hydrate sidebar state from localStorage
+  // Animated sidebar width — drives Topbar left offset and main content padding
+  const sidebarWidthMV = useMotionValue(EXPANDED_W);
+  const animatedSidebarWidth = useSpring(sidebarWidthMV, sidebarSpring);
+  const topbarLeft = useTransform(animatedSidebarWidth, (v) => v);
+  const mainPadding = useTransform(animatedSidebarWidth, (v) => v);
+
+  // Hydrate mounted flag
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(SIDEBAR_KEY);
-      if (saved !== null) {
-        Promise.resolve().then(() => {
-          setCollapsed(JSON.parse(saved));
-        });
-      }
-    } catch {}
-    Promise.resolve().then(() => {
-      setMounted(true);
-    });
+    requestAnimationFrame(() => setMounted(true));
   }, []);
+
+  // Sync animated value with collapsed state
+  useEffect(() => {
+    sidebarWidthMV.set(collapsed ? COLLAPSED_W : EXPANDED_W);
+  }, [collapsed, sidebarWidthMV]);
 
   // Redirect if not authenticated
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        router.push('/auth/login');
-      } else if (user.twoFAEnabled && !user.is2FAVerified) {
-        router.push(`/auth/2fa?userId=${user.id}`);
+        router.replace('/auth/login');
       }
     }
   }, [user, loading, router]);
 
-  const handleToggle = () => {
+  const handleToggle = useCallback(() => {
     setCollapsed((c) => {
       const next = !c;
       try {
-        localStorage.setItem(SIDEBAR_KEY, JSON.stringify(next));
+        localStorage.setItem(SIDEBAR_KEY, String(next));
       } catch {}
       return next;
     });
-  };
+  }, []);
+
+  const handleMobileOpen = useCallback(() => {
+    setMobileDrawerOpen(true);
+  }, []);
+
+  const handleMobileClose = useCallback(() => {
+    setMobileDrawerOpen(false);
+  }, []);
 
   // Loading screen while hydrating
   if (loading || !mounted || !user) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-[var(--white)]">
+      <div className="flex h-screen items-center justify-center bg-[var(--off-white)]">
         <div className="flex flex-col items-center gap-4">
           <div className="relative">
             <BrainCircuit
-              size={36}
-              className="text-[var(--accent)] animate-pulse"
+              size={32}
+              className="animate-pulse text-[var(--accent)]"
             />
           </div>
-          <p className="text-[13px] text-[var(--text-4)]">Cargando ContaMind AI…</p>
+          <p className="text-sm text-[var(--text-3)]">Cargando panel…</p>
         </div>
       </div>
     );
@@ -75,23 +97,30 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-[var(--off-white)]">
-      {/* Sidebar */}
-      <Sidebar collapsed={collapsed} onToggle={handleToggle} />
+      {/* Sidebar (desktop + mobile drawer) */}
+      <Sidebar
+        collapsed={collapsed}
+        onToggle={handleToggle}
+        mobileOpen={mobileDrawerOpen}
+        onMobileClose={handleMobileClose}
+      />
 
-      {/* Topbar */}
-      <Topbar sidebarCollapsed={collapsed} />
+      {/* Topbar — driven by same spring as sidebar */}
+      <Topbar
+        sidebarCollapsed={collapsed}
+        onMobileMenuOpen={handleMobileOpen}
+        animatedLeft={topbarLeft}
+      />
 
-      {/* Main content */}
-      <main
-        className={cn(
-          'pt-[48px] min-h-screen transition-all duration-300',
-          collapsed ? 'pl-[64px]' : 'pl-[240px]'
-        )}
+      {/* Main content — driven by same spring as sidebar */}
+      <motion.main
+        className="pt-[48px] min-h-screen"
+        style={{ paddingLeft: mainPadding }}
       >
-        <div className="p-6 lg:p-8">
+        <div className="mx-auto max-w-[1400px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-8">
           {children}
         </div>
-      </main>
+      </motion.main>
     </div>
   );
 }

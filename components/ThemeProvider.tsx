@@ -20,6 +20,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme | null>(null);
 
   useEffect(() => {
+    // Add no-transitions to prevent initial theme flash animation on mount
+    document.documentElement.classList.add('no-transitions');
+
     const savedTheme = localStorage.getItem('theme') as Theme | null;
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -47,7 +50,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     };
 
     mediaQuery.addEventListener('change', handleSystemChange);
-    return () => mediaQuery.removeEventListener('change', handleSystemChange);
+
+    // Remove no-transitions in the next frame
+    const raf = requestAnimationFrame(() => {
+      document.documentElement.classList.remove('no-transitions');
+    });
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleSystemChange);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   const toggleTheme = () => {
