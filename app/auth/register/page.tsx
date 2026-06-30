@@ -13,6 +13,8 @@ import {
 import Link from "next/link"
 import { useAuth } from "@/hooks/use-auth"
 import PasswordStrength from "@/components/auth/PasswordStrength"
+import { useCooldown } from "@/components/auth/CooldownTimer"
+import { AuthNotification } from "@/components/auth/AuthNotification"
 import { apiClient, setAccessToken } from "@/lib/api-client"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
@@ -56,8 +58,14 @@ export default function RegisterPage() {
   const [workspaceType, setWorkspaceType] = useState<"personal" | "empresa">("personal")
   const [activationChoice, setActivationChoice] = useState<"sri" | "upload" | "demo" | "blank" | null>(null)
   
-  const { setUser, setAuthState } = useAuth()
+  const { setUser, setAuthState, user, loading } = useAuth()
   const router = useRouter()
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/dashboard")
+    }
+  }, [user, loading, router])
 
   // Step 1 Form
   const methods = useForm<Step1Values>({
@@ -84,15 +92,14 @@ export default function RegisterPage() {
   const [invitedMembers, setInvitedMembers] = useState<{ email: string; role: string }[]>([])
 
   // Step 2 Countdown
-  const [resendCountdown, setResendCountdown] = useState(0)
+  const [resendLoading, setResendLoading] = useState(false)
+  const [resendError, setResendError] = useState<string | null>(null)
+  const [resendSuccess, setResendSuccess] = useState(false)
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout
-    if (resendCountdown > 0) {
-      timer = setTimeout(() => setResendCountdown((prev) => prev - 1), 1000)
-    }
-    return () => clearTimeout(timer)
-  }, [resendCountdown])
+  const { secondsLeft: resendCountdown, startCooldown } = useCooldown({
+    key: `register_resend_${userCredentials?.email || "pending"}`,
+    defaultSeconds: 60,
+  })
 
   // Email Polling (Paso 2)
   useEffect(() => {
@@ -151,7 +158,7 @@ export default function RegisterPage() {
       setUserCredentials(data)
       setWorkspaceName(`${data.name}'s Workspace`)
       setStep("VERIFY_EMAIL")
-      setResendCountdown(60)
+      startCooldown(60)
     } catch (err: any) {
       triggerShake()
       setError(err.response?.data?.message || "Error al registrar cuenta. Intente de nuevo.")
@@ -209,16 +216,21 @@ export default function RegisterPage() {
 
   // Step 2: Resend Email
   const handleResendEmail = async () => {
-    if (!userCredentials || resendCountdown > 0) return
-    setIsLoading(true)
+    if (!userCredentials || resendCountdown > 0 || resendLoading) return
+    setResendLoading(true)
+    setResendError(null)
+    setResendSuccess(false)
     try {
       await apiClient.post("/auth/email-verification/resend", { email: userCredentials.email })
+      setResendSuccess(true)
       toast.success("Correo de verificación reenviado.")
-      setResendCountdown(60)
+      startCooldown(60)
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Error al reenviar correo.")
+      const msg = err.response?.data?.message || "Error al reenviar correo."
+      setResendError(msg)
+      toast.error(msg)
     } finally {
-      setIsLoading(false)
+      setResendLoading(false)
     }
   }
 
@@ -567,13 +579,22 @@ export default function RegisterPage() {
               </p>
             </div>
 
+            {resendError && (
+              <AuthNotification type="error" message={resendError} className="max-w-sm mx-auto" />
+            )}
+
+            {resendSuccess && (
+              <AuthNotification type="success" message="¡Correo de verificación reenviado con éxito!" className="max-w-sm mx-auto" />
+            )}
+
             <div className="pt-4 space-y-3 max-w-sm mx-auto">
               <button
                 type="button"
                 onClick={handleResendEmail}
-                disabled={isLoading || resendCountdown > 0}
-                className="w-full inline-flex justify-center bg-[var(--off-white)] hover:bg-[var(--border-light)] border border-[var(--border-light)] text-[var(--text-2)] font-semibold py-3 rounded-[24px] transition-all disabled:opacity-50 active:scale-[0.98] cursor-pointer shadow-sm"
+                disabled={resendLoading || resendCountdown > 0}
+                className="w-full inline-flex justify-center items-center gap-2 bg-[var(--off-white)] hover:bg-[var(--border-light)] border border-[var(--border-light)] text-[var(--text-2)] font-semibold py-3 rounded-[24px] transition-all disabled:opacity-50 active:scale-[0.98] cursor-pointer shadow-sm"
               >
+                {resendLoading && <Loader2 className="animate-spin text-[var(--accent)]" size={14} />}
                 {resendCountdown > 0 
                   ? `Reenviar en ${resendCountdown}s` 
                   : "Reenviar correo de verificación"

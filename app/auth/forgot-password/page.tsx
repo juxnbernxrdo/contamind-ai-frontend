@@ -8,6 +8,7 @@ import { motion } from "motion/react"
 import { Loader2, ArrowLeft, ShieldAlert, KeyRound } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { AuthNotification } from "@/components/auth/AuthNotification"
 import { apiClient } from "@/lib/api-client"
 
 const forgotSchema = z.object({
@@ -61,12 +62,7 @@ export default function ForgotPasswordPage() {
       </div>
 
       {/* Error alert */}
-      {error && (
-        <div className="p-4 bg-[var(--red-soft)] border border-[var(--red)]/20 rounded-[14px] text-[var(--red)] text-xs font-medium flex items-center gap-2">
-          <ShieldAlert size={14} className="flex-shrink-0" />
-          <span>{error}</span>
-        </div>
-      )}
+      {error && <AuthNotification type="error" message={error} />}
 
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>

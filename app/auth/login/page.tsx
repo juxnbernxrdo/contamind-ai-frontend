@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -21,8 +21,14 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [shakeError, setShakeError] = useState(false)
-  const { login } = useAuth()
+  const { login, user, loading } = useAuth()
   const router = useRouter()
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/dashboard")
+    }
+  }, [user, loading, router])
 
   const {
     register,
