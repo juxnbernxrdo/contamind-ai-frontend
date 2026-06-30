@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Sun, Moon, BrainCircuit, ChevronDown, Menu, X } from 'lucide-react';
 import { Logo } from './Logo';
+import { Avatar } from './ui/Avatar';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from './ThemeProvider';
 
@@ -142,13 +143,12 @@ export function Navbar() {
               {user ? (
                 <div className="pt-6 border-t border-[var(--border-light)] flex flex-col gap-4">
                   <div className="flex items-center gap-3 px-2 py-1">
-                    {user.avatarUrl ? (
-                      <img src={user.avatarUrl} alt="Avatar" className="h-9 w-9 rounded-full object-cover ring-2 ring-[var(--border-light)]" />
-                    ) : (
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[var(--accent)] to-[#5e5ce6] text-sm font-bold text-white shadow-sm">
-                        {initials}
-                      </div>
-                    )}
+                    <Avatar
+                      src={user.avatarUrl}
+                      alt="Avatar"
+                      initials={initials}
+                      size="lg"
+                    />
                     <div className="flex flex-col">
                       <span className="text-sm font-semibold text-[var(--text-1)]">
                         {user.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : user.email.split('@')[0]}
